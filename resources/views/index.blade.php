@@ -119,6 +119,29 @@
                     <h2 class="slideanim">Treatments</h2>
 
                 </div>
+          
+               @if(isset($testimonial) && count($testimonial) )
+               @foreach($testimonial as $testimonial)
+
+                <div class="col-md-3  ">
+                    <div class="card h-100 main_cards " style="width: 100%; height:100% ">
+                        <div class="randomImg align-self-center rounded-circle ">
+                            <img src="{{ asset('storage/' . $testimonial->path) }}" class="rounded-circle random_image img-fluid  d-block slideanim"
+                                alt="...">
+                        </div>
+                        <div class="card-body d-flex flex-column slideanim">
+                            <h5 class="card-title text-center">{{ $testimonial->title }}</h5>
+                            <p class="card-text  ">{{ $testimonial->description }}</p>
+                            <div class="text-center btn_div">
+                                <a href="#contact_us_sec" class="btn custmBtn mt-auto ">Enquire Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+                @else
+          
+
                 <div class="col-md-3 ">
                     <div class="card h-100 main_cards " style="width: 100%; height:100% ">
                         <div class="randomImg align-self-center rounded-circle ">
@@ -207,7 +230,6 @@
                     </div>
                 </div>
 
-
                 <div class="col-md-3 ">
                     <div class="card h-100 main_cards " style="width: 100%; height:100% ">
                         <div class="randomImg align-self-center rounded-circle slideanim ">
@@ -224,7 +246,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <div class="col-md-3 ">
                     <div class="card h-100 main_cards " style="width: 100%; height:100% ">
@@ -246,6 +267,22 @@
         </div>
 
 
+                @endif
+
+            
+
+         
+
+
+             
+
+
+             
+
+            </div>
+        </div>
+
+
     </section>
 
 
@@ -254,8 +291,29 @@
 
     <section class="bg-white pt-5 shadow-sm ">
         <div id="about_us" class="container-fluid">
+        
             <div class="row gy-5  ">
+                    @if(isset($about) && count($about) > 0)
+                    @foreach($about as $about)
+                   
                 <div class="col-md-7 my-auto ">
+                    <div class="heading_para slideanim pe-5 ps-1">
+                        <h2 class="text-center">{{ $about->title }}</h2>
+                        <p>{{ $about->description }}</p>
+                    </div>
+
+                </div>
+                <div class="col-md-5">
+                    <div class="rounded-circle slideanim ">
+                        <img src="{{ asset('storage/' . $about->path) }}" class="rounded-circle random_image_about img-fluid  d-block"
+                            alt="...">
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            @else
+
+            <div class="col-md-7 my-auto ">
                     <div class="heading_para slideanim pe-5 ps-1">
                         <h2 class="text-center">About Us</h2>
                         <p>We, Dr. Geetika Homoeopathic Clinic, situated at Dwarka Sector 2, Delhi, provide perfect care
@@ -272,7 +330,9 @@
                             alt="...">
                     </div>
                 </div>
-            </div>
+
+            @endif
+
         </div>
     </section>
 
@@ -284,15 +344,18 @@
                     <h2 class="slideanim">Gallery</h2>
 
                 </div>
+                @if(isset($galleries) && count($galleries) > 0)
+                @foreach($galleries as $image)
                 <div class="col-md-4">
                     <div class="card h-100 ">
                         <div class="randomImg_1 align-self-center slideanim  ">
-                            <img src="{{ asset('storage/thmimage.jpg') }}" class=" img-fluid random_image_1   d-block" alt="...">
+                            <img src="{{ asset('storage/' . $image->path) }}" class=" img-fluid random_image_1   d-block" alt="...">
                         </div>
 
                     </div>
                 </div>
-
+                @endforeach
+                @else
                 <div class="col-md-4">
                     <div class="card h-100">
                         <div class="randomImg_1 align-self-center  ">
@@ -301,42 +364,25 @@
 
                     </div>
                 </div>
-
                 <div class="col-md-4">
-                    <div class="card h-100  ">
-                        <div class="randomImg_1 align-self-center slideanim ">
-                            <img src="{{ asset('storage/thmimage.jpg') }}" class=" img-fluid random_image_1   d-block" alt="...">
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="card h-100 ">
+                    <div class="card h-100">
                         <div class="randomImg_1 align-self-center  ">
                             <img src="{{ asset('storage/thmimage.jpg') }}" class=" img-fluid random_image_1   d-block" alt="...">
                         </div>
 
                     </div>
                 </div>
-
                 <div class="col-md-4">
-                    <div class="card h-100 ">
+                    <div class="card h-100">
                         <div class="randomImg_1 align-self-center  ">
                             <img src="{{ asset('storage/thmimage.jpg') }}" class=" img-fluid random_image_1   d-block" alt="...">
                         </div>
 
                     </div>
                 </div>
+                @endif
 
-                <div class="col-md-4">
-                    <div class="card h-100 ">
-                        <div class="randomImg_1 align-self-center  ">
-                            <img src="{{ asset('storage/thmimage.jpg') }}" class=" img-fluid random_image_1   d-block" alt="...">
-                        </div>
 
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -348,6 +394,39 @@
             <div class="row align-self-center g-4 ">
                 <div class="heading_para1 text-center p-2">
                     <h2 class="slideanim"> Videos that might help you understand homeopathy</h2>
+
+                </div>
+
+                @if(isset($videos) && count($videos) > 0)
+                @foreach($videos as $video)
+
+                <div class="col-md-6  ">
+                    <div class="card h-100 " style="width: 100%;">
+                        <div class="embed-responsive embed-responsive-16by9   ">
+                            <iframe src="{{ $video->link }}" class="random_video  d-block">
+                            </iframe>
+                        </div>
+
+                        <div class="col-md-12 heading text-center pt-2">
+                            <h4>What are the benefits of Homeopathy?</h4>
+                        </div>
+                    </div>
+
+                </div>
+               @endforeach
+
+               @else
+               <div class="col-md-6  ">
+                    <div class="card h-100 " style="width: 100%;">
+                        <div class="embed-responsive embed-responsive-16by9   ">
+                            <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="random_video  d-block">
+                            </iframe>
+                        </div>
+
+                        <div class="col-md-12 heading text-center pt-2">
+                            <h4>What are the benefits of Homeopathy?</h4>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="col-md-6  ">
@@ -363,45 +442,37 @@
                     </div>
 
                 </div>
-
-                <div class="col-md-6  ">
-                    <div class="card h-100" style="width: 100%;">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="random_video  d-block">
-                            </iframe>
-                        </div>
-                        <div class="heading text-center pt-2">
-                            <h4>History of Homeopathy</h4>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="col-md-6  ">
-                    <div class="card h-100  " style="width: 100%;">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="random_video  d-block">
-                            </iframe>
-                        </div>
-                        <div class="heading text-center pt-2">
-                            <h4>Understanding Effects of Homeopathy</h4>
-                        </div>
-
-                    </div>
-                </div>
-
                 <div class="col-md-6  ">
                     <div class="card h-100 " style="width: 100%;">
-                        <div class="embed-responsive embed-responsive-16by9">
+                        <div class="embed-responsive embed-responsive-16by9   ">
                             <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="random_video  d-block">
                             </iframe>
                         </div>
-                        <div class="heading text-center pt-2">
-                            <h4>What is Homeopathy?</h4>
+
+                        <div class="col-md-12 heading text-center pt-2">
+                            <h4>What are the benefits of Homeopathy?</h4>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-6  ">
+                    <div class="card h-100 " style="width: 100%;">
+                        <div class="embed-responsive embed-responsive-16by9   ">
+                            <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" class="random_video  d-block">
+                            </iframe>
                         </div>
 
+                        <div class="col-md-12 heading text-center pt-2">
+                            <h4>What are the benefits of Homeopathy?</h4>
+                        </div>
                     </div>
+
                 </div>
+               @endif
+
+              
+
+
             </div>
         </div>
 

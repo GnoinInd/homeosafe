@@ -8,16 +8,29 @@ use App\Models\User;
 use App\Models\Leave;
 use App\Models\Doctor;
 use App\Models\Notification;
+use App\Models\Gallery;
+use App\Models\Video;
+use App\Models\Testimonial;
+use App\Models\Aboutus;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
     
     public function index()
-    {
-        return view('index');
+    {  $galleries = Gallery::where('status','active')->get(); 
+
+       $videos = Video::where('status','active')->get();
+
+       $testimonial = Testimonial::all();
+
+       $about = Aboutus::all();
+
+        return view('index',compact('galleries','videos','testimonial','about'));
     }
 
 
@@ -378,10 +391,463 @@ public function doctorCheckLogin(Request $request)
 
 
 
+
+
+public function gallery()
+{
+  return view('users');
+}
+
+
+
+
+
+public function showImages()
+{
+    $images = Gallery::all();
+    return view('users', compact('images'));
+}
+
+public function uploadImages(Request $request)
+{
+    $request->validate([
+        'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:3648',
+    ]);
+
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('images', $imageName, 'public');
+
+            $newImage = new Gallery();
+            $newImage->image_name = $imageName;
+            $newImage->path = 'images/' . $imageName;
+            $newImage->save();
+        }
+
+        return redirect()->route('images')->with('success', 'Images uploaded successfully.');
+    }
+
+    return back()->with('error', 'Error uploading the images.');
+}
+
+public function deleteImage($id)
+{
+    $image = Gallery::find($id);
+
+    if ($image) {
+        Storage::disk('public')->delete($image->path);
+        $image->delete();
+        return redirect()->route('images')->with('success', 'Image deleted successfully.');
+    }
+
+    return back()->with('error', 'Image not found or already deleted.');
+}
+
+
+
+
+
+
+
+public function deleteSelectedImages(Request $request)
+{
+    $selectedImages = $request->input('selected_images', []);
+
+    if (count($selectedImages) > 0) {
+        foreach ($selectedImages as $imageId) {
+            $image = Gallery::find($imageId);
+
+            if ($image) {
+                // Delete the image file from storage
+                Storage::delete('public/' . $image->path);
+                
+                // Delete the image record from the database
+                $image->delete();
+            }
+        }
+
+        return redirect()->route('images')->with('success', 'Selected images deleted successfully.');
+    }
+
+    return redirect()->route('images')->with('error', 'No images selected for deletion.');
+}
+
+
   
 
 
+public function setStatus(Request $request, $id)
+{
 
+    // Validate the request
+    $request->validate([
+        'status' => 'required|in:active,inactive',
+    ]);
+
+    $image = Gallery::find($id);
+
+    if (!$image) {
+        return back()->with('error', 'Image not found.');
+    }
+
+    $image->status = $request->input('status');
+    $image->save();
+
+    return back()->with('success', 'Image status updated successfully.');
+}
+
+
+
+
+
+// public function updateImageStatus(Request $request, Gallery $image)
+// {
+//     $status = $request->input('status');
+
+//     // Perform the logic to update the image status (e.g., set 'active' or 'inactive')
+
+//     return back()->with('success', 'Image status updated successfully.');
+// }
+
+
+
+
+public function showVideo()
+{
+     $videos = Video::all();
+     return view('video', compact('videos'));
+    // return view('video');
+}
+
+
+
+
+
+
+public function uploadVideo(Request $request)
+{
+    $request->validate([
+        'video' => [
+            'required',
+            'url',
+            'regex:/^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]+$/',
+        ],
+        'title' => 'required', // You can add other validation rules for the title
+    ]);
+
+    // If validation passes, the URL is in the correct format
+    // and you can proceed to save it to the database
+
+    $video = new Video();
+    $video->title = $request->title;
+    $video->link = $request->video;
+    $video->status = 'inactive';
+    $video->save();
+
+    return redirect()->route('video')
+        ->with('success', 'YouTube video added successfully');
+}
+
+
+
+    // private function extractYouTubeVideoId($link)
+    // {
+    //     $urlParts = parse_url($link);
+    //     if (isset($urlParts['query'])) {
+    //         parse_str($urlParts['query'], $query);
+    //         if (isset($query['v'])) {
+    //             return $query['v'];
+    //         }
+    //     }
+
+    //     return null;
+    // }
+
+
+
+
+
+
+    public function videoStatus(Request $request, $id)
+    {   
+        // dd($id);
+        
+        $video = Video::findOrFail($id);
+
+        
+        $request->validate([
+            'status' => 'required|in:active,inactive',
+        ]);
+
+        // Update the status of the video based on the request data
+        $video->status = $request->input('status');
+        $video->save();
+
+        return redirect()->route('video')->with('success', 'Video status updated successfully');
+    }
+
+
+
+
+
+
+    public function deleteSelectedVideo(Request $request)
+    {
+        $selectedVideoIds = $request->input('selected_videos');
+
+        if ($selectedVideoIds && is_array($selectedVideoIds) && count($selectedVideoIds) > 0) {
+            Video::whereIn('id', $selectedVideoIds)->delete();
+        }
+
+        return redirect()->route('video')->with('success', 'Selected videos have been deleted.');
+    }
+
+
+
+
+
+    public function showTestimonial()
+    {
+        $testimonials = Testimonial::all();
+        return view('testimonial',compact('testimonials'));
+    }
+
+
+    
+
+    public function uploadtestimonial(Request $request)
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:3648',
+        'title' => 'required',
+        'description' => 'required',
+    ]);
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('testimonial', $imageName, 'public'); 
+
+        $newTest = new Testimonial();
+        $newTest->title = $request->title;
+        $newTest->description = $request->description;
+        $newTest->path = 'testimonial/' . $imageName;
+        $newTest->save();
+
+        return redirect()->route('testimonial')->with('success', 'Image uploaded successfully.');
+    }
+
+    return back()->with('error', 'Error uploading the image.');
+}
+
+
+
+
+
+public function deleteSelectedTestimonial(Request $request)
+{
+    $selectedImages = $request->input('selected_images', []);
+
+    if (count($selectedImages) > 0) {
+        foreach ($selectedImages as $imageId) {
+            $image = Testimonial::find($imageId);
+
+            if ($image) {
+                // Delete the image file from storage
+                Storage::delete('public/' . $image->path);
+                
+                // Delete the image record from the database
+                $image->delete();
+            }
+        }
+
+        return redirect()->route('testimonial')->with('success', 'Selected images deleted successfully.');
+    }
+
+    return redirect()->route('testimonial')->with('error', 'No images selected for deletion.');
+}
+
+
+
+
+
+public function edit($id)
+{
+    
+    $testimonial = Testimonial::findOrFail($id);
+
+ 
+    return view('testimonialEdit', compact('testimonial'));
+}
+
+
+
+// public function update(Request $request, Testimonial $testimonial)
+// {
+//     $data = $request->validate([
+//         'title' => 'required',
+//         'description' => 'required',
+//     ]);
+
+
+//     if ($request->hasFile('image')) {
+       
+//         $image = $request->file('image');
+//         $imageName = time() . '.' . $image->getClientOriginalExtension();
+//         $image->storeAs('testimonial', $imageName, 'public');
+
+//         // Remove the old image if it exists
+//         if ($testimonial->path) {
+//             Storage::disk('public')->delete($testimonial->path);
+//         }
+
+     
+//         $testimonial->path = 'testimonial/' . $imageName;
+//     }
+//     $testimonial->title = $request->input('title');
+//     $testimonial->description = $request->input('description');
+
+//     $testimonial->save();
+
+
+
+//     // $testimonial->update($data);
+
+//     return redirect()->route('testimonial.update')->with('success', 'Testimonial updated successfully');
+// }
+
+
+
+
+
+
+public function update(Request $request, Testimonial $testimonial)
+{
+    // $testimonial = Testimonial::findOrFail($id);
+
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+    ]);
+
+    
+    if ($request->hasFile('image')) {
+       
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('testimonial', $imageName, 'public');
+
+        // Remove the old image if it exists
+        if ($testimonial->path) {
+            Storage::disk('public')->delete($testimonial->path);
+        }
+
+     
+        $testimonial->path = 'testimonial/' . $imageName;
+    }
+
+    
+    $testimonial->title = $request->input('title');
+    $testimonial->description = $request->input('description');
+
+    $testimonial->save();
+
+    return redirect()->route('testimonial')->with('success', 'Testimonial updated successfully');
+}
+
+
+
+
+
+
+public function showAbout()
+{
+    $aboutus = Aboutus::all();
+    return view('about-us', compact('aboutus'));
+}
+
+
+
+
+
+
+
+public function uploadAbout(Request $request)
+{
+    $request->validate([
+        'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:3648',
+        'title' => 'required',
+        'description' => 'required',
+    ]);
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('about-us', $imageName, 'public');
+
+        $newAbout = new Aboutus();
+        $newAbout->title = $request->title;
+        $newAbout->description = $request->description;
+        $newAbout->path = 'about-us/' . $imageName;
+        $newAbout->save();
+
+        return redirect()->route('about')->with('success', 'Image uploaded successfully.');
+    }
+
+    return back()->with('error', 'Error uploading the image.');
+}
+
+
+
+
+public function aboutEdit(Aboutus $about)
+{
+    return view('aboutEdit', compact('about'));
+}
+
+
+
+
+
+
+
+public function aboutUpdate(Request $request)
+{
+    // dd($request->all()); 
+    
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+    ]);
+
+    $aboutId = $request->input('about_id'); 
+
+    $about = Aboutus::findOrFail($aboutId);
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->storeAs('about-us', $imageName, 'public');
+
+        // Remove the old image if it exists
+        if ($about->path) {
+            Storage::disk('public')->delete($about->path);
+        }
+
+        $about->path = 'about-us/' . $imageName;
+    }
+
+    $about->title = $request->input('title');
+    $about->description = $request->input('description');
+    $about->save();
+
+    return redirect()->route('about')->with('success', 'About Us updated successfully');
+}
+
+
+
+    
 
 
 

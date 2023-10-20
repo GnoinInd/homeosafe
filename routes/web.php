@@ -62,6 +62,61 @@ Route::post('/mark-notification-as-read/{id}', [AdminController::class, 'markNot
 
 // Route::post('/mark-notification-as-read/{notification}', [AdminController::class, 'markNotificationAsRead'])->name('mark-notification-as-read');
 
+/// Route::get('/admin-pannel-gallery',[AdminController::class,'gallery'])->name('admin.gallery');
+      //images
+Route::get('/images', [AdminController::class, 'showImages'])->name('images');
+Route::post('/images/upload', [AdminController::class, 'uploadImages'])->name('images.upload');
+Route::delete('/images/{id}', [AdminController::class, 'deleteImage'])->name('images.delete');
+Route::post('/images/delete-selected', [AdminController::class, 'deleteSelectedImages'])
+    ->name('images.deleteSelected');
+
+Route::post('/images/{id}/set-status', [AdminController::class, 'setStatus'])->name('images.setStatus');
+
+
+
+// Route::patch('/images/{id}/status', [AdminController::class,'setStatus'])->name('images.setStatus');
+
+Route::post('images/{image}/update-status', [AdminController::class,'updateImageStatus'])->name('images.updateStatus');
+
+    //video
+Route::get('/video', [AdminController::class, 'showVideo'])->name('video');
+Route::post('/video/upload', [AdminController::class, 'uploadVideo'])->name('video.upload');
+Route::delete('/video/{id}', [AdminController::class, 'deleteVideo'])->name('video.delete');
+Route::post('/video/delete-selected', [AdminController::class, 'deleteSelectedVideo'])
+    ->name('video.deleteSelected');
+
+Route::post('/video/{id}/set-status', [AdminController::class, 'videoStatus'])->name('video.setStatus');    
+
+         //testimonial
+Route::get('/testimonial',[AdminController::class,'showTestimonial'])->name('testimonial');
+Route::post('/testimonial/upload', [AdminController::class, 'uploadtestimonial'])->name('testimonial.upload');
+
+Route::get('/testimonial/edit/{id}', [AdminController::class,'edit'])->name('testimonial.edit');
+Route::put('/testimonials/{testimonial}', [AdminController::class, 'update'])->name('testimonial.update');
+
+Route::delete('/testimonial/delete/{id}', [AdminController::class, 'deleteTestimonial'])->name('testimonial.delete');
+Route::delete('/testimonial/delete-selected', [AdminController::class, 'deleteSelectedTestimonial']) ->name('testimonial.deleteSelected');
+Route::post('/testimonial/{id}/set-status', [AdminController::class, 'testimonialStatus'])->name('testimonial.setStatus'); 
+
+Route::get('about-us',[AdminController::class,'showAbout'])->name('about');
+Route::post('/about-us/upload', [AdminController::class, 'uploadAbout'])->name('about.upload');
+// Route::get('/about-us/edit/{id}', [AdminController::class,'aboutEdit'])->name('about.edit');
+Route::get('/about-us/edit/{about}', [AdminController::class, 'aboutEdit'])->name('about.edit');
+// Route::post('/about-us/{about}', [AdminController::class, 'aboutUpdate'])->name('about.update');
+Route::put('/about-us/update', [AdminController::class, 'aboutUpdate'])->name('about.update');
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
