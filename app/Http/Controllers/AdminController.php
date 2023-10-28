@@ -92,10 +92,28 @@ class AdminController extends Controller
     }
 
 
-  public function list()
+  public function list(Request $request)
    {
     if (!Auth::check()) {
         return redirect()->route('login');
+    }
+
+
+    $option = $request['searchOption'];
+    $search = $request['searchValue'] ?? "";
+
+    if ($search != "")
+    {
+        $patients = Patient::with('referringDoctor')
+        ->where($option,'LIKE',"%$search%")->get();
+       
+    }
+    else
+    {
+        $patients = Patient::with('referringDoctor')
+        ->orderBy('created_at', 'desc') 
+        ->get();
+
     }
     
     //  $patients = Patient::with('referringDoctor')->get();
@@ -104,9 +122,6 @@ class AdminController extends Controller
       // ->where('is_read', true)
       // ->get();
 
-      $patients = Patient::with('referringDoctor')
-      ->orderBy('created_at', 'desc') 
-      ->get();
 
     // return view('list', compact('patients'));
 
@@ -114,7 +129,7 @@ class AdminController extends Controller
 
 
     $notifications = Patient::where('is_read', false)->get();
-    return view('list', compact('notifications','patients'));
+    return view('list', compact('notifications','patients','option','search'));
 
 
 
@@ -129,6 +144,25 @@ class AdminController extends Controller
     
    
    }
+
+
+
+
+
+   public function search(Request $request)
+   {
+       $searchOption = $request->input('searchOption');
+       $searchValue = $request->input('searchValue');
+
+       $results = Patient::where($searchOption, 'like', '%' . $searchValue . '%')->get();
+
+      
+
+       return view('list', compact('results'));
+   }
+
+
+
 
 
 
@@ -271,8 +305,13 @@ public function markNotificationsAsRead()
       return redirect()->route('patient.list'); // Redirect to the patient list page
   } else {
       // Authentication failed
-      return redirect()->back()->withInput($request->only('email'))
-          ->withErrors(['password' => 'Username or password is incorrect.']);
+
+    //   return redirect()->back()->withInput($request->only('email'))
+    //       ->withErrors(['password' => 'Username or password is incorrect.']);
+
+
+    return redirect()->back()->with(['error' => 'email or password is incorrect.']);
+
   }
    }
 
@@ -341,7 +380,7 @@ public function doctorDetail(Request $request)
   $doctor->password = Hash::make($request->password);
   $doctor->specialist = $request->specialist;
   $doctor->save();
-  return redirect()->back()->with('success', 'data saved successfully')
+  return redirect()->back()->with('success', 'unavailable date saved successfully')
   ->withInput();
 }
 
@@ -391,6 +430,15 @@ public function doctorCheckLogin(Request $request)
 
 
 
+public function doctorLogout()
+{
+    Auth::logout(); 
+
+    return redirect()->route('/');
+}
+
+
+
 
 
 public function gallery()
@@ -404,6 +452,10 @@ public function gallery()
 
 public function showImages()
 {
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+    
     $images = Gallery::all();
     return view('users', compact('images'));
 }
@@ -515,6 +567,10 @@ public function setStatus(Request $request, $id)
 
 public function showVideo()
 {
+    if (!Auth::check()) {
+        return redirect()->route('login');
+    }
+    
      $videos = Video::all();
      return view('video', compact('videos'));
     // return view('video');
@@ -843,6 +899,35 @@ public function aboutUpdate(Request $request)
     $about->save();
 
     return redirect()->route('about')->with('success', 'About Us updated successfully');
+}
+
+
+
+
+public function availDate()
+{
+    $doctor = Doctor::all();
+        
+    return view('available-date')->with('doctor', $doctor);
+    
+}
+
+
+
+
+public function checkAvailableDates(Request $request)
+{
+    dd($request->all());
+    $doctorId = $request->input('ref');
+    $year = $request->input('selectedYear');
+    $month = $request->input('selectedMonth');
+
+    $availableDates = Doctor::where('doctor_id', $doctorId)
+        ->whereYear('date', $year)
+        ->whereMonth('date', $month)
+        ->pluck('date');
+
+    return view('available-date', compact('availableDates'));
 }
 
 

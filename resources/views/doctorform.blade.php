@@ -43,7 +43,10 @@
     <script src="{{ asset('js/swiper.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('css/swiper.css') }}">
     
+       
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
 
@@ -69,14 +72,50 @@
 
 
 
+<script>
+  @if(Session::has('success'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.success("{{ session('success') }}");
+  @endif
+
+  @if(Session::has('error'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.error("{{ session('error') }}");
+  @endif
+
+  @if(Session::has('info'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.info("{{ session('info') }}");
+  @endif
+
+  @if(Session::has('warning'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.warning("{{ session('warning') }}");
+  @endif
+</script>
 
 
 
-@if (session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-    </div>
-@endif
+
+
+
+
 
 
 
@@ -86,7 +125,13 @@
     @else
         <p>Doctor Not Found</p>
     @endif
-<a href="{{ url('logout') }}">Logout</a>
+
+    <form action="{{ route('logout') }}" method="POST">
+    @csrf
+    <button class="btn btn-info" type="submit">Logout</button>
+</form>
+
+<!-- <a href="{{ url('logout') }}">Logout</a> -->
 
 <div class="container border  ">
             <div class="panel panel-success">

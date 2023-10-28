@@ -8,7 +8,7 @@
   <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css' rel='stylesheet'>
   <link href='https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css' rel='stylesheet'>
 
-  <meta name="csrf-token" content="{{ csrf_token() }}"> 
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -89,6 +89,8 @@
     ::-webkit-scrollbar-thumb:hover {
       background: #555;
     }
+
+  
 
     @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap");
 
@@ -239,6 +241,10 @@
       height: 100vh
     }
 
+    
+
+
+
     @media screen and (min-width: 768px) {
       body {
         margin: calc(var(--header-height) + 1rem) 0 0 0;
@@ -272,6 +278,35 @@
         padding-left: calc(var(--nav-width) + 188px)
       }
     }
+
+
+
+    .container-custom{
+  background: #CCCCCC !important;
+  border: 4px solid blue;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+.container-custom tbody tr:hover{
+  background-color: #5f8d27 !important;
+  
+ 
+}
+.container-custom tbody tr {
+  transition: background-color 0.3s ease;
+}
+.container-custom thead{
+  background: blue;
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: sans-serif;
+}
+
+
+
+
+
+
   </style>
 </head>
 
@@ -343,37 +378,152 @@
     </div>
 @endif
 
-<div class="panel-heading  text-center mb-4 p-3">Patient List</div>
 
-<div class="container-fluid p-5">
-    <table class="table">
-        <thead>
+
+<div class="panel-heading  text-center p-3">Patient List</div>
+
+
+<form action="">
+ 
+<div class="d-flex flex-row ms-4 my-3">
+
+ 
+        <select name="searchOption" id="optionSelect">
+            <option value="name" {{ $option == 'name' ? 'selected' : '' }}>Patient Name</option>
+            <!-- <option value="refered_by" {{ $option == 'refered_by' ? 'selected' : '' }}>Doctor Name</option> -->
+            <option value="phone"{{ $option == 'phone' ? 'selected' : '' }}>Phone Number</option>
+            <option value="date" {{ $option == 'date' ? 'selected' : '' }}>Date</option>
+        </select>
+
+        <div class="input-group">
+            <div class="form-outline ms-2">
+                <input type="search" name="searchValue" id="form1" class="form-control" value="{{$search}}" />
+            </div>
+            <button type="submit" class="btn btn-primary" id="searchButton">
+                <i class="fas fa-search"></i> Search
+            </button>
+                   <a href="{{ route('patient.list') }}" class="btn btn-primary ms-2">
+              Reset
+            </a>
+            
+         
+        </div>
+     
+        
+       
+         
+        </div>
+        
+    </div>
+
+  </form>
+
+<div class="container-fluid  p-3">
+<div class="row">
+  <div class="col-12">
+  <div class="table-responsive">
+<table class="table table-bordered container-custom">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">
+                <div class="tablefonts">
+                Patient name
+                </div>
+            </th>
+            <th scope="col">
+                <div class="tablefonts">
+                Gender
+                </div>
+            </th>
+            <th scope="col">
+                <div class="tablefonts">
+                Referred_by
+                </div>
+            </th>
+            <th scope="col">
+                <div class="tablefonts">
+                Phone number
+                </div>
+            </th>
+            <th scope="col">
+                <div class="tablefonts">
+                Appointment Date
+                </div>
+            </th>
+            <th scope="col">
+                <div class="tablefonts">
+                Description
+                </div>
+            </th>
+            <th scope="col">
+                <div class="tablefonts">
+                Email
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($patients as $patient)
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Patient name</th>
-                <th scope="col">Gender</th>
-                <th scope="col">Refered_by</th>
-                <th scope="col">Phone number</th>
-                <th scope="col">Appointment Date</th>
-                <th scope="col">Description</th>
-                <th scope="col">email</th>
+                <th scope="row">{{ $patient->id}}</th>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->name}}
+                    </div>
+                </td>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->gender }}
+                    </div>
+                </td>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->referringDoctor->name }}
+                    </div>
+                </td>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->phone}}
+                    </div>
+                </td>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->date }}
+                    </div>
+                </td>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->description }}
+                    </div>
+                </td>
+                <td>
+                    <div class="tablefonts fw-bold">
+                    {{ $patient->email }}
+                    </div>
+                </td>
+                
             </tr>
-        </thead>
-        <tbody>
-            @foreach ($patients as $patient)
-                <tr>
-                    <th scope="row">{{ $patient->id}}</th>
-                    <td>{{ $patient->name}}</td>
-                    <td>{{ $patient->gender }}</td>
-                    <td>{{ $patient->referringDoctor->name }}</td>
-                    <td>{{ $patient->phone}}</td>
-                    <td>{{ $patient->date }}</td>
-                    <td>{{ $patient->description }}</td>
-                    <td>{{ $patient->email }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+</table>
+</div>
+
+<div class="col-12 mt-4">
+<nav aria-label="Page navigation example   ">
+  <ul class="pagination float-end">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
+</div>
+  </div>
+</div>
+
+
 </div>
 
 <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
