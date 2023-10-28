@@ -93,7 +93,7 @@
     <nav class="navbar sticky-top navbar-expand-lg navbar_shadow_top navbar-dark ">
         <div class="container-fluid">
             <div class="main-logo ps-2">
-                <a href="/homdeo.html"><img src="{{ asset('storage/mainlogo.webp') }}" alt="logo"></a>
+                <a href=""><img src="{{ asset('storage/mainlogo.webp') }}" alt="logo"></a>
             </div>
 
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -130,113 +130,25 @@
 
 
     <section class="footer bg-white pt-5 pb-3 shadow-sm border" id="contact_us_sec">
-        <div class="container border  ">
+        <div class="container border">                  
             <div class="panel panel-success">
-            <!-- <div class="text-center"> 
-                <label class="control-label h2">Check Available Date & Shift</label><br>
-                <a href="{{ route('avail.date') }}" class="btn btn-primary my-3">Check Date</a>
-            </div> -->
-                
+             
                 <div class="panel-body">
-                    <form action="/form" method="POST">
-                        @csrf
+                   
                         <div class="row">
                             <div class="col-md-12 p-0 m-0">
-                                <div class="panel-heading  text-center mb-4 p-3">Schedule an Appointment</div>
-                            </div>
-                            <div class="col-md-6">
-        
-                                <div class="form-group">
-                                    <label class="control-label">Patient Name:*</label>
-                                    <input type="text" class="form-control" name="name" id="name" required
-                                        placeholder="Enter Name">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Phone Number:*</label>
-                                    <input type="tel" class="form-control" name="phone" id="number" required
-                                        placeholder="1234567890">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-2">
-                                <div class="form-group">
-                                    <label class="control-label">Email ID</label>
-                                    <input type="text" class="form-control" name="email" id="email" required
-                                        placeholder="example@gmail.com">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                            <div class="form-group">
-                         <label class="control-label">Reffered By:</label>
-                         
-                         <select name="ref" class="form-control" required>
-                         <option value="">Select</option>
-                         @foreach($doctor as $doctors)
-                         <option value="{{ $doctors->id }}">{{ $doctors->name }}</option>
-                             @endforeach
-                         </select>
-                       
-                     </div>
-                            </div>
-                        </div>
+                                <div class="panel-heading  text-center mb-4 p-3"></div>
+                             </div>
+                            
 
+                        </div>
+                   
 
               
 
 
 
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Gender:*</label>
-                                    <input type="radio" name="gender" value="male" required> Male
-                                    <input type="radio" name="gender" value="female" required> Female
-                                    <input type="radio" name="gender" value="female" required> Others
-                                </div>
-                            </div>
-                            <div class='col-md-6'>
-                                <div class="form-group">
-                                    <label class="control-label" required>Appointment Time</label>
-                                    Date:* <input type="text" name="date" id="datepicker">
-                                        
-                                        
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-
-                            <div class='col-md-6'>
-                                <label class="control-label">Shift:</label>
-                                    <input type="radio" name="shift" value="morning" required> Morning
-                                    <input type="radio" name="shift" value="evening" required> evening
-                                    <input type="radio" name="shift" value="all" required> all
-                                        
-                                        
-                                    </div>
-                                </div>
-                                <br>
-                      
-
-
-                            
-
-
-
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Description:</label>
-                                    <input type="text" name="desc" id="desc">
-                                </div>
-                            </div>
-
-
-                        </div>
                         <div class="text-center">
                             <input type="submit" class="btn   mt-4 mb-4" value="Submit">
                         </div>

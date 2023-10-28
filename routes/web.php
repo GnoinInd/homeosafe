@@ -20,7 +20,7 @@ use App\Http\Controllers\AdminController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/register',[AdminController::class,'register']);
+Route::get('/register',[AdminController::class,'register'])->name('register');
 Route::post('/register',[AdminController::class,'registration'])->name('admin.register');
 Route::get('/login', [AdminController::class, 'login'])->name('login');
 Route::post('/login',[AdminController::class,'checkLogin'])->name('check.login');
@@ -37,9 +37,21 @@ Route::get('/',[AdminController::class,'index']);
 Route::get('/form',[AdminController::class,'form']);
 Route::post('/form',[AdminController::class,'formSubmit'])->name('form.submit');
 Route::get('/patient-list',[AdminController::class,'list'])->name('patient.list');
+
+Route::get('/search', [AdminController::class, 'showSearchForm'])->name('search.form');
+Route::post('/search', [AdminController::class, 'search'])->name('search');
+
+
+
+
+
+
+
 // Route::get('/doctor-unavailable-form',[AdminController::class,'doctorForm']); //doctor unavailable form
 Route::get('doctor-unavailable-form/{id}',[AdminController::class,'doctorForm'])->name('doctor-unavailable-form');//doctor unavailable form
 Route::post('/doctor-form',[AdminController::class,'doctorapply']); //doctor unavailablity store on leaves table
+
+Route::get('/doctor-logout',[AdminController::class,'doctorLogout'])->name('doctor.logout');
 
 Route::get('/doctor-login',[AdminController::class,'doctorLogin']); //doctor login form
 Route::post('/doctor-login',[AdminController::class,'doctorCheckLogin'])->name('doctor.check'); //check doctor login
@@ -103,7 +115,11 @@ Route::post('/about-us/upload', [AdminController::class, 'uploadAbout'])->name('
 // Route::get('/about-us/edit/{id}', [AdminController::class,'aboutEdit'])->name('about.edit');
 Route::get('/about-us/edit/{about}', [AdminController::class, 'aboutEdit'])->name('about.edit');
 // Route::post('/about-us/{about}', [AdminController::class, 'aboutUpdate'])->name('about.update');
-Route::put('/about-us/update', [AdminController::class, 'aboutUpdate'])->name('about.update');
+Route::put('/about-us/update', [AdminController::class, 'aboutUpdate'])->name('about.update'); 
+
+Route::get('available-date',[AdminController::class,'availDate'])->name('avail.date');
+
+Route::post('/check-available-dates', [AdminController::class,'checkAvailableDates'])->name('check.available.dates');
 
 
 

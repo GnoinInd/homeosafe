@@ -1,109 +1,141 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
-    <!-- Required meta tags -->
+    
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
-    <link href="{{ asset('css/swiper.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-    <script>
-    $( function() {
-      $( "#datepicker" ).datepicker();
-    } );
-    </script>
-
-
-
-
-    <script type="text/javascript">
-
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'en', includedLanguages: 'en,hi,bn,mai,mr,sa,ta,te,kn,pa,layout: google.translate.TranslateElement.InlineLayout.SIMPLE' }, 'google_translate_element');
-
-        }
-
-    </script>
-    <link rel="icon" href="img/favicon.png" type="image/icon type">
-
-    <script type="text/javascript"
-        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-    <link rel="stylesheet" href="{{ asset('css/homdeo.css') }}">
-    <script src="{{ asset('js/float-panel.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('css/float-panel.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/form.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/map.css') }}">
-    <script src="https://kit.fontawesome.com/bbed85d1ee.js" crossorigin="anonymous"></script>
-    <script src="{{ asset('js/swiper.js') }}"></script>
-    <link rel="stylesheet" href="{{ asset('css/swiper.css') }}">
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+    <script>
+        window.onload = function() {
+            var emailInput = document.getElementById("email");
+            emailInput.focus();
+            emailInput.select();
+        };
+    </script>
 
 
 
 
-    <title>InstaHomeo</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
 
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+
+
+    <title>Login</title>
 </head>
+
 <body>
 
-<a href="{{ url('register') }}">Register</a>
 
-<div class="container border  ">
-            <div class="panel panel-success">
-                
-                
-                <div class="panel-body">
-                    <form action="/login" method="POST">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-12 p-0 m-0">
-                                <div class="panel-heading  text-center mb-4 p-3">Login</div>
+
+
+
+<script>
+  @if(Session::has('success'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.success("{{ session('success') }}");
+  @endif
+
+  @if(Session::has('error'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.error("{{ session('error') }}");
+  @endif
+
+  @if(Session::has('info'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.info("{{ session('info') }}");
+  @endif
+
+  @if(Session::has('warning'))
+  toastr.options =
+  {
+  	"closeButton" : true,
+  	"progressBar" : true
+  }
+  		toastr.warning("{{ session('warning') }}");
+  @endif
+</script>
+
+
+
+
+
+
+    <section class="vh-100">
+        <div class="container-fluid">
+            <div class="row form-overflow">
+                <div class="col-sm-6 text-black">
+
+                    <div class="ps-4 ms-xl-4">
+                        <i class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4" style="color: #709085;"></i>
+                        <span class="h1 fw-bold mb-0"><a href="/index.html"><img src="images/glintix_logo.png"
+                                    alt=""></a></span>
+                    </div>
+
+                    <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4  pt-xl-0 mt-xl-n5">
+
+                        <form action="{{ route('login') }}" method="POST" style="width: 23rem;">
+                          @csrf
+
+                            <h3 class="fw-normal mb-3 pb-3 fw-700" style="letter-spacing: 1px;">Sign in to Continue</h3>
+
+                            <div class="form-floating mb-3">
+                                <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com">
+                                <label for="floatingInput">Email address</label>
                             </div>
-                            <div class="col-md-6">
-        
-                                <div class="form-group">
-                                    <label class="control-label"> email:</label>
-                                    <input type="text" class="form-control" name="email" id="email" required
-                                        placeholder="Enter email">
-                                </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="password" name="password" class="form-control" id="floatingPassword"
+                                    placeholder="Password">
+                                <label for="floatingPassword">Password</label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label class="control-label">Password:</label>
-                                    <input type="text" class="form-control" name="password" id="password" required
-                                        placeholder="enter password">
-                                </div>
+
+                            <div class="pt-1 mb-4">
+                                <button class="btn btn-success btn-lg btn-block" type="submit">Login</button>
                             </div>
-                        </div>
-                    
-                       
-                        <div class="text-center">
-                            <input type="submit" class="btn   mt-4 mb-4" value="Submit">
-                        </div>
-                    </form>
-                    
-    
+
+                            <p class="small mb-5 pb-lg-2"><a class="text-muted" href="#!">Forgot password?</a></p>
+                            <p>Don't have an account? <a href="{{ route('register') }}" class="link-info">Register here</a></p>
+
+                        </form>
+
+                    </div>
+
+                </div>
+                <div class="col-sm-6 px-0 d-none d-sm-block">
+                    <img src="{{ asset('storage/doctor.jpg') }}" alt="Login image" class="w-100 vh-100"
+                        style="object-fit: cover; object-position: left;">
                 </div>
             </div>
         </div>
+    </section>
 
-        
-
-
-        @if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
 
 
-
-    
 </body>
+
 </html>

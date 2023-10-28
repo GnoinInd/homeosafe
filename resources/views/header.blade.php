@@ -312,10 +312,51 @@
 
 
     }
+    .imguploadsec{
+  background: #cccccc;
+}
+
+.imguploadsec button{
+    border: 1px solid blue !important;
+    color: black;
+}
+.custmbody{
+    background: aliceblue !important;
+}
+
+.custminputupload{
+    border: 1px solid blue;
+    cursor: pointer;
+}
+
+.imageUploadedViewSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.custmfileprevBtn button{
+    border-radius: 7px;
+    border: 1px solid blue;
+}
+.videourlUploadedViewSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.imguploads h4{
+    background: grey;
+    padding: 10px;
+    color: white;
+    border: 1px solid blue;
+}
+
     </style>
 </head>
 
-<body className='snippet-body'>
+<body class='snippet-body custmbody'>
 
    <body id="body-pd">
         <header class="header" id="header">

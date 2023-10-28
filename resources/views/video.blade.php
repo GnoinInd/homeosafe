@@ -4,7 +4,7 @@
 
         
       <div class="form-group">
-   <input type="url" name="video" id="video" class="form-control" required>
+
    @error('video')
        <div class="alert alert-danger">{{ $message }}</div>
    @enderror
@@ -39,19 +39,25 @@
     <div class="col-12">
         <div class="row">
             @if(isset($videos) && count($videos) > 0)
-                @foreach($videos as $video)
-                    <div class="col-6 mt-4">
-                        <input type="checkbox" name="selected_videos[]" value="{{ $video->id }}" class="img-fluid">
-                        <iframe width="450" height="250" src="{{ $video->link }}" frameborder="0" allowfullscreen></iframe>
-                        <p>{{$video->title}}</p>
+            @foreach($videos as $video)
+                    <div class="col-md-6 col-lg-4 col-sm-12 mt-4">
+                       <div class="videourlUploadedViewSection">
+                       <div class="d-flex flex-row">
+                       <input type="checkbox" name="selected_videos[]" value="{{ $video->id }}" class="img-fluid m-2">
+                        <iframe width="auto" height="auto" src="{{ $video->link }}" frameborder="0" allowfullscreen></iframe>
+                       </div>
+                        <!-- <p>{{$video->title}}</p> -->
                         <form action="{{ route('video.setStatus', $video->id) }}" method="POST">
                             @csrf
                            
-                            <button type="submit" name="status" value="active"
+                          <div class="d-flex p-2 flex-row custmfileprevBtn">
+                          <button type="submit" name="status" value="active"
                                 class="status-button {{ $video->status === 'active' ? 'active' : 'inactive' }}">Active</button>
                             <button type="submit" name="status" value="inactive"
                                 class="status-button {{ $video->status === 'inactive' ? 'active' : 'inactive' }}">Inactive</button>
+                          </div>
                         </form>
+                       </div>
                     </div>
                 @endforeach
             @else
