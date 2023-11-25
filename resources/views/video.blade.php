@@ -1,10 +1,7 @@
 @include('header')
 
         
-
-        
       <div class="form-group">
-
    @error('video')
        <div class="alert alert-danger">{{ $message }}</div>
    @enderror
@@ -76,9 +73,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
 
 

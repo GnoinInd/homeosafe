@@ -12,7 +12,6 @@
                         <label class="mb-1" for="title">Testimonial Title</label>
                         <input type="text" name="title" id="title" class="form-control">
                     </div>
-
                     <div class="form-group my-3">
                         <label class="mb-1" for="desccription">Testimonial Description</label>
                         <textarea name="description" id="description" class="form-control" rows="4"></textarea>
@@ -23,9 +22,6 @@
             </div>
 
             <br><br>
-
-
-
             <form action="{{ route('testimonial.deleteSelected') }}" method="POST">
                 @csrf
                 @method('DELETE')
@@ -40,9 +36,7 @@
 
                                 <img class="mt-2" src="{{ asset('storage/' . $testimonial->path) }}"
                                     alt="{{ $testimonial->title }}" width="250px" height="200px">
-                                <!-- <p class="ms-5 mt-1">{{ $testimonial->title }}</p> -->
-
-
+                            
                             </div>
 
                             <div class="row">
@@ -52,8 +46,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                     </div>
                     @endforeach
