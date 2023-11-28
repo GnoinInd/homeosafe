@@ -56,37 +56,7 @@ class AdminController extends Controller
      $patient->save();
      return back();
 
-
-
-
-  //    $patientName = $request->name;
-  //    $gender = $request->gender;
-  //    $shift = $request->shift;
-  //    $email = $request->email;
-  //    $mobile = $request->phone;
-  //    $description = $request->desc;
-     
-  //  $date = Carbon::now()->timezone('Asia/Kolkata')->format('Y-m-d H:i:s'); 
-  //   Notification::create([
-  //     'patient_name' => $patientName,
-  //     'gender' => $gender,
-  //     'shift' => $shift,
-  //     'email' => $email,
-  //     'mobile' => $mobile,
-  //     'desc' => $description,
-  //     'date' => $date,
-  //     'is_read' => false,
-    
-  // ]);
-
-  // Redirect to the admin panel or wherever you want
   return redirect('admin/dashboard')->with('success', 'Notification created successfully');
-
-
-
-
-
-
 
      
     }
@@ -115,38 +85,11 @@ class AdminController extends Controller
         ->get();
 
     }
-    
-    //  $patients = Patient::with('referringDoctor')->get();
-
-      // $patients = Patient::with('referringDoctor')
-      // ->where('is_read', true)
-      // ->get();
-
-
-    // return view('list', compact('patients'));
-
-
-
 
     $notifications = Patient::where('is_read', false)->get();
     return view('list', compact('notifications','patients','option','search'));
 
-
-
-
-
-
-
-
-    //  $list = Patient::all();
-     
-    //  return  view('list',['list'=> $list]);
-    
-   
    }
-
-
-
 
 
    public function search(Request $request)
@@ -155,24 +98,11 @@ class AdminController extends Controller
        $searchValue = $request->input('searchValue');
 
        $results = Patient::where($searchOption, 'like', '%' . $searchValue . '%')->get();
-
-      
-
        return view('list', compact('results'));
    }
 
-
-
-
-
-
-
-
-
    public function markNotificationAsRead($id)
    {
-   
-        // $notification = Notification::find($id);
       $notification = Patient::find($id);
        
        if (!$notification) {
@@ -184,25 +114,9 @@ class AdminController extends Controller
        return response()->json(['message' => 'Notification marked as read']);
    }
    
-
-
-
-
-
-//     public function showNotifications()
-// {
-//     // Assuming you have retrieved notifications from your database
-//     $notifications = Notification::all(); // Replace with your actual query to fetch notifications
-
-//     return view('list', ['notifications' => $notifications]);
-// }
-
-
-
-
 public function indexes(Request $request)
 {
-  // Retrieve all unread notifications for the admin
+ 
   $notifications = Notification::where('user_id', auth()->user()->id)
   ->where('is_read', false)
   ->get();
@@ -210,47 +124,14 @@ public function indexes(Request $request)
 return view('list', ['notifications' => $notifications]);
 }
 
-
-
-
-
 public function markNotificationsAsRead()
 {
-    // Mark all unread notifications for the admin as read
     Notification::where('user_id', auth()->user()->id)
         ->where('is_read', false)
         ->update(['is_read' => true]);
 
     return response()->json(['message' => 'Notifications marked as read.']);
 }
-
-
-
-
-
-
-
-
-// public function markNotificationAsRead($id)
-// {
-//   $notification = Notification::find($id);
-//   if (!$notification) {
-//     return response()->json(['message' => 'Notification not found'], 404);
-// }
-// $notification->is_read = true;
-// $notification->save();
-
-// return response()->json(['message' => 'Notification marked as read']);
-//     // $notification->update(['is_read' => true]);
-
-//     // return response()->json(['message' => 'Notification marked as read']);
-// }
-
-
-
-
-
-
 
 
 
@@ -289,10 +170,8 @@ public function markNotificationsAsRead()
     ->withInput();
 
    }
-
    public function checkLogin(Request $request)
    {
-    // Validate the user input (you can add more validation rules as needed)
     $request->validate([
       'email' => 'required|email',
       'password' => 'required',
@@ -301,25 +180,15 @@ public function markNotificationsAsRead()
   $credentials = $request->only('email', 'password');
 
   if (Auth::attempt($credentials)) {
-      // Authentication passed
-      return redirect()->route('patient.list'); // Redirect to the patient list page
+      return redirect()->route('patient.list'); 
   } else {
-      // Authentication failed
-
-    //   return redirect()->back()->withInput($request->only('email'))
-    //       ->withErrors(['password' => 'Username or password is incorrect.']);
-
-
     return redirect()->back()->with(['error' => 'email or password is incorrect.']);
 
   }
    }
 
- 
-
 public function logout(Request $request)
 {
-    // $request->session()->flush();
     Auth::logout(); 
 
     return redirect()->route('login');
@@ -327,13 +196,12 @@ public function logout(Request $request)
 
 public function doctorForm($id)
 {
-  $doctor = Doctor::find($id); //fetch single doctor all data
+  $doctor = Doctor::find($id); 
   $id = $doctor->id;
   if ($doctor) {
     $id = $doctor->id;
     $name = $doctor->name;
 } else {
-    // Handle the case where the doctor is not found 
     $name = 'Doctor Not Found';
 }
   return view('doctorform', ['id' => $id,'name' => $name]);
@@ -353,10 +221,8 @@ public function doctorapply(Request $request)
  
 }
 
-
 public function showCalendar()
 {
-    // Retrieve leave dates from the "leaves" table
     $leaveDates = Leave::pluck('date')->toArray();
    
     
@@ -383,53 +249,23 @@ public function doctorDetail(Request $request)
   return redirect()->back()->with('success', 'unavailable date saved successfully')
   ->withInput();
 }
-
-
-
 public function doctorLogin()
 {
   return view('doctor-login');
 }
-
-// public function doctorCheckLogin(Request $request)
-// {
-   
-    
-// $doctor = Doctor::where('email', $request->email)->first();
-
-// if ($doctor && Hash::check($request->password, $doctor->password)) {
-//     // Doctor is authenticated, redirect to the desired page
-//     return redirect('doctor-unavailable-form');
-// } else {
-//     // Authentication failed, redirect back with an error message and input data
-//     return redirect()->back()
-//         ->with('error', 'Username or password is incorrect.')
-//         ->withInput($request->only('email')); // Keep only the 'email' input
-// }
-
-
-// }
-
-
-
 
 public function doctorCheckLogin(Request $request)
 {
     $doctor = Doctor::where('email', $request->email)->first();
 
     if ($doctor && Hash::check($request->password, $doctor->password)) {
-        // Doctor is authenticated, redirect to the desired page with the doctor's ID
         return redirect()->route('doctor-unavailable-form', ['id' => $doctor->id]);
     } else {
-        // Authentication failed, redirect back with an error message and input data
         return redirect()->back()
             ->with('error', 'Username or password is incorrect.')
-            ->withInput($request->only('email')); // Keep only the 'email' input
+            ->withInput($request->only('email')); 
     }
 }
-
-
-
 public function doctorLogout()
 {
     Auth::logout(); 
@@ -437,18 +273,10 @@ public function doctorLogout()
     return redirect()->route('/');
 }
 
-
-
-
-
 public function gallery()
 {
   return view('users');
 }
-
-
-
-
 
 public function showImages()
 {
@@ -496,12 +324,6 @@ public function deleteImage($id)
     return back()->with('error', 'Image not found or already deleted.');
 }
 
-
-
-
-
-
-
 public function deleteSelectedImages(Request $request)
 {
     $selectedImages = $request->input('selected_images', []);
@@ -511,10 +333,7 @@ public function deleteSelectedImages(Request $request)
             $image = Gallery::find($imageId);
 
             if ($image) {
-                // Delete the image file from storage
                 Storage::delete('public/' . $image->path);
-                
-                // Delete the image record from the database
                 $image->delete();
             }
         }
@@ -525,14 +344,9 @@ public function deleteSelectedImages(Request $request)
     return redirect()->route('images')->with('error', 'No images selected for deletion.');
 }
 
-
-  
-
-
 public function setStatus(Request $request, $id)
 {
 
-    // Validate the request
     $request->validate([
         'status' => 'required|in:active,inactive',
     ]);
@@ -550,21 +364,6 @@ public function setStatus(Request $request, $id)
 }
 
 
-
-
-
-// public function updateImageStatus(Request $request, Gallery $image)
-// {
-//     $status = $request->input('status');
-
-//     // Perform the logic to update the image status (e.g., set 'active' or 'inactive')
-
-//     return back()->with('success', 'Image status updated successfully.');
-// }
-
-
-
-
 public function showVideo()
 {
     if (!Auth::check()) {
@@ -573,12 +372,7 @@ public function showVideo()
     
      $videos = Video::all();
      return view('video', compact('videos'));
-    // return view('video');
 }
-
-
-
-
 
 
 public function uploadVideo(Request $request)
@@ -589,11 +383,9 @@ public function uploadVideo(Request $request)
             'url',
             'regex:/^https:\/\/www\.youtube\.com\/embed\/[A-Za-z0-9_-]+$/',
         ],
-        'title' => 'required', // You can add other validation rules for the title
+        'title' => 'required', 
     ]);
 
-    // If validation passes, the URL is in the correct format
-    // and you can proceed to save it to the database
 
     $video = new Video();
     $video->title = $request->title;
@@ -606,47 +398,18 @@ public function uploadVideo(Request $request)
 }
 
 
-
-    // private function extractYouTubeVideoId($link)
-    // {
-    //     $urlParts = parse_url($link);
-    //     if (isset($urlParts['query'])) {
-    //         parse_str($urlParts['query'], $query);
-    //         if (isset($query['v'])) {
-    //             return $query['v'];
-    //         }
-    //     }
-
-    //     return null;
-    // }
-
-
-
-
-
-
     public function videoStatus(Request $request, $id)
     {   
-        // dd($id);
         
         $video = Video::findOrFail($id);
-
-        
         $request->validate([
             'status' => 'required|in:active,inactive',
         ]);
-
-        // Update the status of the video based on the request data
         $video->status = $request->input('status');
         $video->save();
 
         return redirect()->route('video')->with('success', 'Video status updated successfully');
     }
-
-
-
-
-
 
     public function deleteSelectedVideo(Request $request)
     {
@@ -658,19 +421,11 @@ public function uploadVideo(Request $request)
 
         return redirect()->route('video')->with('success', 'Selected videos have been deleted.');
     }
-
-
-
-
-
     public function showTestimonial()
     {
         $testimonials = Testimonial::all();
         return view('testimonial',compact('testimonials'));
     }
-
-
-    
 
     public function uploadtestimonial(Request $request)
 {
@@ -698,9 +453,6 @@ public function uploadVideo(Request $request)
 }
 
 
-
-
-
 public function deleteSelectedTestimonial(Request $request)
 {
     $selectedImages = $request->input('selected_images', []);
@@ -710,10 +462,8 @@ public function deleteSelectedTestimonial(Request $request)
             $image = Testimonial::find($imageId);
 
             if ($image) {
-                // Delete the image file from storage
                 Storage::delete('public/' . $image->path);
-                
-                // Delete the image record from the database
+                      
                 $image->delete();
             }
         }
@@ -723,9 +473,6 @@ public function deleteSelectedTestimonial(Request $request)
 
     return redirect()->route('testimonial')->with('error', 'No images selected for deletion.');
 }
-
-
-
 
 
 public function edit($id)
